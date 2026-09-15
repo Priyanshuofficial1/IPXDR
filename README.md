@@ -44,3 +44,38 @@ Initial architecture scaffold. Implementation will be developed incrementally wi
 ## Safety boundary
 
 This project is for authorized defensive monitoring and controlled security research. It is passive by design and must not be used to interfere with monitored systems.
+
+## Quick start
+
+```bash
+python -m pip install -e '.[test]'
+uvicorn backend.api.main:app --host 127.0.0.1 --port 8000
+```
+
+Open `http://127.0.0.1:8000/dashboard` for the SOC dashboard and `http://127.0.0.1:8000/docs` for the API documentation.
+
+### Passive ingestion
+
+POST a validated `FlowEvent` to `/ingest`, or process a PCAP with:
+
+```bash
+python replay/pcap_replay.py path/to/capture.pcap
+```
+
+No packets are transmitted by the PCAP adapter.
+
+### Detection stack
+
+IPXDR combines interpretable protocol/statistical signals, a per-host behavioral baseline, temporal and communication-graph features, Isolation Forest anomaly scoring, and an optional labeled Random Forest. The fusion layer emits an alert only when combined evidence reaches the configured threshold.
+
+### Benchmark
+
+On the development environment used for this repository, the current end-to-end Python pipeline processed 10,000 synthetic events in 11.81 s (~847 events/s). This is an engineering benchmark, not a production throughput guarantee; reproduce it with `python benchmarks/throughput.py` on the target deployment hardware.
+
+## Docker
+
+```bash
+docker compose up --build
+```
+
+The container exposes port 8000. See `docs/DEPLOYMENT.md` and `docs/MODEL_CARD.md` for deployment and evaluation constraints.
