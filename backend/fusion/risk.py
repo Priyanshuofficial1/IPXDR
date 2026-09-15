@@ -24,10 +24,4 @@ def fuse(flow_id: str, timestamp, results: list[DetectorResult], behavior_deviat
     if anomaly_score: evidence.append(f'anomaly_score={anomaly_score:.3f}')
     if confidence < 0.5:
         return None
-    if confidence < 0.5:
-        return None
-    if confidence < 0.5:
-        return None
-    if confidence < 0.5:
-        return None
     return Alert(alert_id=f'{flow_id}:{threat}',timestamp=timestamp,flow_id=flow_id,threat_class=threat,confidence=confidence,severity=severity(confidence),supporting_evidence=evidence[:12],model_scores={r.detector_name:r.score for r in chosen},behavior_deviation=behavior_deviation)
