@@ -16,8 +16,8 @@ from backend.alerts.store import AlertStore
 class PipelineStats:
     received:int=0; accepted:int=0; failed:int=0
 class Pipeline:
-    def __init__(self,window_seconds:int=60):
-        self.windows=WindowStore(window_seconds); self.stats=PipelineStats(); self.behavior=BehavioralStore(); self.engine=DetectionEngine(); self.alerts=AlertStore(); self.last_features={}; self.last_behavior_deviation=0.0
+    def __init__(self,window_seconds:int=60, db_path: str | None = None):
+        self.windows=WindowStore(window_seconds); self.stats=PipelineStats(); self.behavior=BehavioralStore(); self.engine=DetectionEngine(); self.alerts=AlertStore(db_path=db_path); self.last_features={}; self.last_behavior_deviation=0.0
     def process(self,event:FlowEvent)->NormalizedFlow:
         self.stats.received+=1
         try:

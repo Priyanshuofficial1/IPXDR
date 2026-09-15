@@ -39,7 +39,7 @@ PCAP / NetFlow / IPFIX / sFlow
 
 ## Repository status
 
-Core passive detection vertical slice implemented. Dataset training remains intentionally separate; no real-world detection-performance claim is made until reproduced by the benchmark suite.
+Core passive detection, advanced heuristic signals, anomaly/supervised model lifecycle, persistent alert storage, SOC dashboard, adversarial stress testing, unseen-threat proof fixture and CI are implemented. Dataset training remains intentionally separate; synthetic benchmarks are not real-world accuracy claims.
 
 ## Safety boundary
 
@@ -68,6 +68,18 @@ No packets are transmitted by the PCAP adapter.
 ### Detection stack
 
 IPXDR combines interpretable protocol/statistical signals, a per-host behavioral baseline, temporal and communication-graph features, Isolation Forest anomaly scoring, and an optional labeled Random Forest. The fusion layer emits an alert only when combined evidence reaches the configured threshold.
+
+### Validation and operations
+
+```bash
+pytest -q
+python benchmarks/throughput.py
+python benchmarks/adversarial.py
+python benchmarks/unknown_threat.py
+python scripts/demo.py
+```
+
+Alerts persist to SQLite when the API is run (`IPXDR_DB_PATH` controls the path), and fitted models are stored under `IPXDR_MODEL_DIR` (default `models/`). Training endpoints can be protected with `IPXDR_ADMIN_TOKEN`. Export alerts from `/alerts/export`. See `docs/FINAL_READINESS.md` for the implementation/evaluation boundary.
 
 ### Benchmark
 

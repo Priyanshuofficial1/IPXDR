@@ -4,12 +4,14 @@ import os
 import secrets
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Header
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
+import json
 from backend.processing.pipeline import Pipeline
 from backend.ingestion.models import FlowEvent
 
 app = FastAPI(title='IPXDR API', version='0.4.0', description='Passive AI threat detection for unidirectional IP traffic')
-pipeline = Pipeline()
+pipeline = Pipeline(db_path=os.getenv('IPXDR_DB_PATH', 'ipxdr.db'))
+pipeline.engine.load_models(os.getenv('IPXDR_MODEL_DIR', 'models'))
 _subscribers: set[WebSocket] = set()
 
 @app.get('/health')
@@ -23,6 +25,16 @@ def metrics():
             'alerts': len(pipeline.alerts.items), 'anomaly_model': pipeline.engine.anomaly.fitted,
             'supervised_model': pipeline.engine.supervised.fitted,
             'hosts': len(pipeline.behavior.hosts), 'windows': len(pipeline.windows.active_keys)}
+
+
+@app.get('/status')
+def status():
+    return {'service':'ipxdr','version':app.version,'passive':True,'storage':bool(pipeline.alerts.db_path),'detectors':['rules-v2','isolation-forest','random-forest'],'metadata_only_encryption':True}
+
+@app.get('/alerts/export')
+def export_alerts():
+    payload = json.dumps([a.model_dump(mode='json') for a in pipeline.alerts.list(5000)], indent=2)
+    return Response(content=payload, media_type='application/json', headers={'Content-Disposition':'attachment; filename=ipxdr-alerts.json'})
 
 @app.get('/alerts')
 def alerts(limit: int = 100):
@@ -79,6 +91,7 @@ def anomaly_fit(rows: list[dict[str, float]], x_ipxdr_admin_token: str | None = 
     _admin_guard(x_ipxdr_admin_token)
     if len(rows) < 10: raise HTTPException(400, 'at least 10 baseline rows required')
     pipeline.engine.fit_anomaly(rows)
+    pipeline.engine.save_models(os.getenv('IPXDR_MODEL_DIR', 'models'))
     return {'trained': True, 'rows': len(rows), 'features': pipeline.engine.anomaly.feature_names}
 
 @app.post('/supervised/fit')
@@ -87,6 +100,7 @@ def supervised_fit(payload: dict, x_ipxdr_admin_token: str | None = Header(defau
     rows, labels = payload.get('rows', []), payload.get('labels', [])
     if len(rows) < 10 or len(rows) != len(labels): raise HTTPException(400, 'at least 10 labeled rows and matching labels required')
     pipeline.engine.fit_supervised(rows, labels)
+    pipeline.engine.save_models(os.getenv('IPXDR_MODEL_DIR', 'models'))
     return {'trained': True, 'rows': len(rows), 'classes': list(pipeline.engine.supervised.model.classes_),
             'features': pipeline.engine.supervised.feature_names}
 

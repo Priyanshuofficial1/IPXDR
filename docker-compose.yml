@@ -1,5 +1,14 @@
 services:
   ipxdr:
     build: .
-    ports: ["8000:8000"]
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      IPXDR_ADMIN_TOKEN: ${IPXDR_ADMIN_TOKEN:-change-me}
+      IPXDR_DB_PATH: /data/ipxdr.db
+      IPXDR_MODEL_DIR: /data/models
+    volumes:
+      - ipxdr-data:/data
     restart: unless-stopped
+volumes:
+  ipxdr-data:

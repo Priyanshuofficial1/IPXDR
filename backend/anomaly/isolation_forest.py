@@ -1,5 +1,7 @@
 from __future__ import annotations
 import numpy as np
+from pathlib import Path
+import joblib
 from sklearn.ensemble import IsolationForest
 
 class AnomalyDetector:
@@ -10,6 +12,11 @@ class AnomalyDetector:
     def fit(self, rows: list[dict[str,float]]):
         if not rows: raise ValueError('training rows required')
         self.feature_names=sorted(rows[0]); self.model.fit(np.asarray([[r.get(k,0.0) for k in self.feature_names] for r in rows],dtype=float)); self.fitted=True; return self
+    def save(self, path):
+        if not self.fitted: raise ValueError("model is not fitted")
+        Path(path).parent.mkdir(parents=True, exist_ok=True); joblib.dump({"model":self.model,"feature_names":self.feature_names}, path)
+    def load(self, path):
+        data=joblib.load(path); self.model=data["model"]; self.feature_names=data["feature_names"]; self.fitted=True; return self
     def score(self, row: dict[str,float]) -> float:
         if not self.fitted: return 0.0
         x=np.asarray([[row.get(k,0.0) for k in self.feature_names]],dtype=float)

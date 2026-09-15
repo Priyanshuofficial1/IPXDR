@@ -21,3 +21,8 @@ models/*.bin
 models/*.joblib
 models/*.pkl
 .DS_Store
+ipxdr.db
+models/*.joblib
+models/*.json
+__pycache__/
+.pytest_cache/
