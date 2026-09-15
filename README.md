@@ -71,12 +71,14 @@ IPXDR combines interpretable protocol/statistical signals, a per-host behavioral
 
 ### Benchmark
 
-On the development environment used for this repository, the current end-to-end Python pipeline processed 10,000 synthetic events in 11.81 s (~847 events/s). This is an engineering benchmark, not a production throughput guarantee; reproduce it with `python benchmarks/throughput.py` on the target deployment hardware.
+On the development environment used for this repository, the current end-to-end Python pipeline processed 10,000 synthetic events in 4.20 s (~2,381 events/s; ~10.47 Mbps; p95 ~0.72 ms). This is an engineering benchmark, not a production throughput guarantee; reproduce it with `python benchmarks/throughput.py` on the target deployment hardware.
 
 ## Docker
 
 ```bash
-docker compose up --build
+docker build -t ipxdr .
+
+docker run --rm -p 127.0.0.1:8000:8000 -e IPXDR_ADMIN_TOKEN=change-me ipxdr
 ```
 
-The container exposes port 8000. The API is intended for a trusted monitoring enclave; put authentication and network policy in front of training endpoints before exposing them beyond localhost. See `docs/DEPLOYMENT.md` and `docs/MODEL_CARD.md` for deployment and evaluation constraints.
+The container exposes port 8000. The API is intended for a trusted monitoring enclave; put authentication and network policy in front of training endpoints before exposing them beyond localhost. See `docs/DEPLOYMENT.md`, `docs/SECURITY.md`, `docs/ADVERSARIAL_TESTING.md`, and `docs/MODEL_CARD.md` for deployment and evaluation constraints.

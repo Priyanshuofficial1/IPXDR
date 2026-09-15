@@ -8,6 +8,7 @@ from backend.features.temporal import extract_temporal_features
 from backend.features.dns import extract_dns_features
 from backend.features.tls import extract_tls_features
 from backend.features.quic import extract_quic_features
+from backend.graph.features import communication_features
 from backend.features.behavioral import BehavioralStore
 from backend.detection.engine import DetectionEngine
 from backend.alerts.store import AlertStore
@@ -23,7 +24,7 @@ class Pipeline:
             n=normalize(event); self.windows.add(n); w=self.windows.get(n.src_ip)
             # Bound per-event feature work while retaining the full 60s event window for storage.
             feature_window=w[-256:]
-            self.last_features={**extract_flow_features(n),**extract_temporal_features(feature_window),**extract_dns_features(feature_window),**extract_tls_features(feature_window),**extract_quic_features(feature_window)}
+            self.last_features={**extract_flow_features(n),**extract_temporal_features(feature_window),**extract_dns_features(feature_window),**extract_tls_features(feature_window),**extract_quic_features(feature_window),**communication_features(feature_window)}
             self.last_behavior_deviation=self.behavior.score(n.src_ip,feature_window)
             _,_,alert=self.engine.analyze(n,feature_window,self.last_behavior_deviation)
             if alert: self.alerts.add(alert)

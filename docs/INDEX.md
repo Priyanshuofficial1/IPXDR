@@ -19,3 +19,8 @@
 7. Add dashboard, persistence and benchmark automation.
 
 The PRD defines product acceptance. The TRD defines the technical baseline used to implement and test that acceptance.
+
+- `ADVERSARIAL_TESTING.md` — controlled evasion robustness benchmark.
+- `DEMO.md` — SIH26145 demonstration and benchmark commands.
+- `INGESTION.md` — PCAP and flow-export adapter boundaries.
+- `SECURITY.md` — passive invariant and API hardening.

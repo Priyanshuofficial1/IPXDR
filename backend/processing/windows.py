@@ -27,3 +27,7 @@ class WindowStore:
         for bucket in list(self._events.values()):
             while bucket and bucket[0].timestamp < cutoff:
                 bucket.popleft()
+
+    @property
+    def active_keys(self):
+        return tuple(k for k,v in self._events.items() if v)
