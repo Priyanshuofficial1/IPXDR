@@ -4,6 +4,7 @@ from pathlib import Path
 from collections.abc import Iterator
 from scapy.all import IP, TCP, UDP, DNS, DNSQR, RawPcapReader
 from .models import FlowEvent
+from .metadata import tls_metadata, quic_metadata
 
 PROTO = {6: "TCP", 17: "UDP"}
 
@@ -31,6 +32,8 @@ class PCAPIngestor:
                 src_port = dst_port = 0
                 flags = []
             dns = None
+            tls = tls_metadata(packet)
+            quic = quic_metadata(packet)
             if DNS in packet and DNSQR in packet:
                 q = packet[DNSQR]
                 qname = q.qname.decode(errors="replace").rstrip(".")
@@ -41,5 +44,5 @@ class PCAPIngestor:
                 src_ip=ip.src, dst_ip=ip.dst, src_port=int(src_port), dst_port=int(dst_port),
                 protocol=PROTO.get(int(ip.proto), str(ip.proto)), packets=1, bytes=len(raw),
                 duration_ms=0, tcp_flags=flags,
-                direction="unknown", dns=dns, source="pcap",
+                direction="unknown", dns=dns, tls=tls, quic=quic, source="pcap",
             )

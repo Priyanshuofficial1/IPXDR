@@ -10,9 +10,6 @@ import sys
 from pathlib import Path
 from datetime import datetime,timezone
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from backend.ingestion.models import FlowEvent
 from backend.processing.pipeline import Pipeline
 
