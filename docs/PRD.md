@@ -1,4 +1,4 @@
-# DIODESENTINEL Product Requirements Document
+# IPXDR Product Requirements Document
 
 ## Vision
 A passive, self-adapting AI platform that detects known and previously unseen cyber threats in unidirectional IP traffic using metadata only.

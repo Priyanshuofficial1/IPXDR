@@ -1,2 +1,2 @@
 def test_project_identity():
-    assert "DIODESENTINEL" == "DIODESENTINEL"
+    assert "IPXDR" == "IPXDR"

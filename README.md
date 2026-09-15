@@ -1,4 +1,4 @@
-# DIODESENTINEL
+# IPXDR
 
 Passive, self-adapting AI threat detection for unidirectional IP traffic.
 
