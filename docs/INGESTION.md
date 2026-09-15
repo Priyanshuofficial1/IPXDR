@@ -12,3 +12,8 @@ This adapter is intentionally an **export-record adapter**, not a complete binar
 `JSONLIngestor` is the deterministic test/demo format.
 
 All ingestion paths are read-only from the monitored-traffic perspective.
+
+
+## Native binary protocols
+
+See [NATIVE_FLOW_PROTOCOLS.md](NATIVE_FLOW_PROTOCOLS.md) for the offline IPFIX v10 and sFlow v5 decoders. JSONL/CSV remain the broadest exporter adapter because arbitrary vendor schemas cannot be safely inferred.
