@@ -39,7 +39,7 @@ PCAP / NetFlow / IPFIX / sFlow
 
 ## Repository status
 
-Initial architecture scaffold. Implementation will be developed incrementally with tests, datasets, model cards, and measured benchmarks. No detection-performance claims are made until reproduced by the benchmark suite.
+Core passive detection vertical slice implemented. Dataset training remains intentionally separate; no real-world detection-performance claim is made until reproduced by the benchmark suite.
 
 ## Safety boundary
 
@@ -56,10 +56,11 @@ Open `http://127.0.0.1:8000/dashboard` for the SOC dashboard and `http://127.0.0
 
 ### Passive ingestion
 
-POST a validated `FlowEvent` to `/ingest`, or process a PCAP with:
+POST a validated `FlowEvent` to `/ingest`, or process a PCAP with packet events or aggregated passive 5-tuple flows:
 
 ```bash
 python replay/pcap_replay.py path/to/capture.pcap
+python replay/pcap_replay.py path/to/capture.pcap --aggregate
 ```
 
 No packets are transmitted by the PCAP adapter.
@@ -78,4 +79,4 @@ On the development environment used for this repository, the current end-to-end 
 docker compose up --build
 ```
 
-The container exposes port 8000. See `docs/DEPLOYMENT.md` and `docs/MODEL_CARD.md` for deployment and evaluation constraints.
+The container exposes port 8000. The API is intended for a trusted monitoring enclave; put authentication and network policy in front of training endpoints before exposing them beyond localhost. See `docs/DEPLOYMENT.md` and `docs/MODEL_CARD.md` for deployment and evaluation constraints.

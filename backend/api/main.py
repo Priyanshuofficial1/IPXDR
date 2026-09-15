@@ -20,7 +20,7 @@ def metrics():
     return {'received': s.received, 'accepted': s.accepted, 'failed': s.failed,
             'alerts': len(pipeline.alerts.items), 'anomaly_model': pipeline.engine.anomaly.fitted,
             'supervised_model': pipeline.engine.supervised.fitted,
-            'hosts': len(pipeline.behavior.hosts), 'windows': len(pipeline.windows.windows)}
+            'hosts': len(pipeline.behavior.hosts), 'windows': sum(len(v) > 0 for v in pipeline.windows._events.values())}
 
 @app.get('/alerts')
 def alerts(limit: int = 100):
