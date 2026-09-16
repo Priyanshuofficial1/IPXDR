@@ -23,5 +23,11 @@ class AlertStore:
             self._db.commit()
     def list(self, limit: int = 100) -> list[Alert]:
         return list(self.items)[-limit:][::-1]
+    def clear(self) -> None:
+        """Clear alerts for a new user analysis session."""
+        self.items.clear()
+        if self._db:
+            self._db.execute("DELETE FROM alerts")
+            self._db.commit()
     def close(self):
         if self._db: self._db.close()

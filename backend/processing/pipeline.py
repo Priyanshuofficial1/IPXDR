@@ -18,6 +18,15 @@ class PipelineStats:
 class Pipeline:
     def __init__(self,window_seconds:int=60, db_path: str | None = None):
         self.windows=WindowStore(window_seconds); self.stats=PipelineStats(); self.behavior=BehavioralStore(); self.engine=DetectionEngine(); self.alerts=AlertStore(db_path=db_path); self.last_features={}; self.last_behavior_deviation=0.0
+    def reset_session(self) -> None:
+        """Start a clean analysis session while preserving loaded ML models."""
+        self.windows = WindowStore(self.windows.window_seconds)
+        self.behavior = BehavioralStore()
+        self.stats = PipelineStats()
+        self.alerts.clear()
+        self.last_features = {}
+        self.last_behavior_deviation = 0.0
+
     def process(self,event:FlowEvent)->NormalizedFlow:
         self.stats.received+=1
         try:

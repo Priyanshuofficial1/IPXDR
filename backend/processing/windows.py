@@ -8,6 +8,7 @@ class WindowStore:
     def __init__(self, window_seconds: int = 60, max_events_per_key: int = 10_000):
         if window_seconds <= 0 or max_events_per_key <= 0:
             raise ValueError("window and capacity must be positive")
+        self.window_seconds = window_seconds
         self.window = timedelta(seconds=window_seconds)
         self.max_events_per_key = max_events_per_key
         self._events: dict[str, deque[NormalizedFlow]] = defaultdict(deque)

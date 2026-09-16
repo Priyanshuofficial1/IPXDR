@@ -2,17 +2,22 @@ from __future__ import annotations
 import asyncio
 import os
 import secrets
+import shutil
+import tempfile
+from collections import Counter
 from pathlib import Path
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Header
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Header, UploadFile, File
 from fastapi.responses import FileResponse, Response
 import json
 from backend.processing.pipeline import Pipeline
 from backend.ingestion.models import FlowEvent
+from backend.ingestion.pcap import PCAPIngestor
 
 app = FastAPI(title='IPXDR API', version='0.4.0', description='Passive AI threat detection for unidirectional IP traffic')
 pipeline = Pipeline(db_path=os.getenv('IPXDR_DB_PATH', 'ipxdr.db'))
 pipeline.engine.load_models(os.getenv('IPXDR_MODEL_DIR', 'models'))
 _subscribers: set[WebSocket] = set()
+latest_analysis: dict = {'loaded': False, 'filename': None, 'traffic': [], 'topology': [], 'packets': 0, 'flows': 0}
 
 @app.get('/health')
 def health():
@@ -35,6 +40,10 @@ def status():
 def export_alerts():
     payload = json.dumps([a.model_dump(mode='json') for a in pipeline.alerts.list(5000)], indent=2)
     return Response(content=payload, media_type='application/json', headers={'Content-Disposition':'attachment; filename=ipxdr-alerts.json'})
+
+@app.get('/analysis/latest')
+def analysis_latest():
+    return latest_analysis
 
 @app.get('/alerts')
 def alerts(limit: int = 100):
@@ -64,6 +73,64 @@ async def _broadcast(payload: dict):
             dead.append(ws)
     for ws in dead:
         _subscribers.discard(ws)
+
+@app.post('/upload/pcap')
+async def upload_pcap(file: UploadFile = File(...)):
+    """Analyze a user-supplied PCAP locally, read-only, and replace the dashboard session with its findings."""
+    name = (file.filename or '').lower()
+    if not name.endswith(('.pcap', '.pcapng', '.cap')):
+        raise HTTPException(400, 'upload a PCAP/PCAPNG file')
+    max_bytes = int(os.getenv('IPXDR_MAX_UPLOAD_MB', '200')) * 1024 * 1024
+    fd, temp_path = tempfile.mkstemp(prefix='ipxdr-', suffix='.pcap')
+    os.close(fd)
+    size = 0
+    try:
+        with open(temp_path, 'wb') as out:
+            while chunk := await file.read(1024 * 1024):
+                size += len(chunk)
+                if size > max_bytes:
+                    raise HTTPException(413, f'PCAP exceeds {max_bytes // (1024*1024)} MB limit')
+                out.write(chunk)
+        pipeline.reset_session()
+        packet_count = 0
+        events = []
+        for event in PCAPIngestor(temp_path).events():
+            pipeline.process(event)
+            events.append(event)
+            packet_count += 1
+        found = pipeline.alerts.list(5000)
+        # Build dashboard series strictly from the uploaded capture; no seeded/random telemetry.
+        traffic = []
+        topology = []
+        if events:
+            start = min(e.timestamp for e in events)
+            buckets = {}
+            edges = Counter()
+            for e in events:
+                idx = int((e.timestamp - start).total_seconds() // 10)
+                buckets[idx] = buckets.get(idx, 0) + 1
+                edges[(e.src_ip, e.dst_ip)] += 1
+            traffic = [{'bucket': k, 'events': buckets[k]} for k in sorted(buckets)]
+            topology = [{'src': a, 'dst': b, 'count': c} for (a,b),c in edges.most_common(40)]
+        latest_analysis.update({'loaded': True, 'filename': file.filename, 'traffic': traffic, 'topology': topology, 'packets': packet_count, 'flows': pipeline.stats.accepted})
+        classes = Counter(a.threat_class for a in found)
+        severities = Counter(a.severity for a in found)
+        top = found[0] if found else None
+        return {
+            'ok': True, 'filename': file.filename, 'bytes': size, 'packets': packet_count,
+            'flows': pipeline.stats.accepted, 'alerts': len(found),
+            'threat_classes': dict(classes), 'severity': dict(severities),
+            'top_threat': top.model_dump(mode='json') if top else None,
+            'passive': True, 'decryption': False, 'transmission': False,
+        }
+    except HTTPException:
+        raise
+    except Exception as exc:
+        pipeline.reset_session()
+        raise HTTPException(400, f'PCAP analysis failed: {exc}') from exc
+    finally:
+        try: os.unlink(temp_path)
+        except OSError: pass
 
 @app.post('/ingest')
 async def ingest(event: FlowEvent):
