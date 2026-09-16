@@ -51,7 +51,8 @@ def alerts(limit: int = 100):
 
 @app.get('/hosts')
 def hosts():
-    return [{'src_ip': ip, 'observations': b.observations, 'baseline_ready': pipeline.behavior.ready(ip)}
+    return [{'src_ip': ip, 'observations': b.observations, 'baseline_ready': pipeline.behavior.ready(ip),
+             'window_events': len(pipeline.windows.get(ip))}
             for ip, b in pipeline.behavior.hosts.items()]
 
 @app.get('/hosts/{src_ip}')
