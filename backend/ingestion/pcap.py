@@ -18,7 +18,9 @@ class PCAPIngestor:
     def events(self) -> Iterator[FlowEvent]:
         for index, (raw, meta) in enumerate(RawPcapReader(str(self.path))):
             from scapy.layers.l2 import Ether
-            packet = Ether(raw)
+            # Support both Ethernet and raw-IP PCAP link types.
+            version = raw[0] >> 4 if raw else 0
+            packet = IP(raw) if version == 4 else Ether(raw)
             if IP not in packet:
                 continue
             ip = packet[IP]
