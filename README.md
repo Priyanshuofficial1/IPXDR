@@ -83,7 +83,7 @@ Alerts persist to SQLite when the API is run (`IPXDR_DB_PATH` controls the path)
 
 ### Benchmark
 
-On the development environment used for this repository, the current end-to-end Python pipeline processed 10,000 synthetic events in 4.20 s (~2,381 events/s; ~10.47 Mbps; p95 ~0.72 ms). This is an engineering benchmark, not a production throughput guarantee; reproduce it with `python benchmarks/throughput.py` on the target deployment hardware.
+Run `python benchmarks/throughput.py -n 10000 --json --output benchmarks/results/throughput-10k.json` to record an end-to-end engineering measurement with events/sec, derived Mbps and p50/p95/p99 per-event latency. Results depend on hardware/runtime and are not production guarantees. Synthetic benchmark results must not be presented as real-world detection accuracy.
 
 ## Docker
 
