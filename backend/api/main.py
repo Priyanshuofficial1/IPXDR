@@ -184,6 +184,10 @@ async def alerts_ws(ws: WebSocket):
     except Exception:
         _subscribers.discard(ws)
 
+@app.get('/')
+def root_dashboard():
+    return FileResponse(Path(__file__).resolve().parents[2] / 'frontend' / 'dashboard' / 'index.html')
+
 @app.get('/dashboard')
 def dashboard():
     return FileResponse(Path(__file__).resolve().parents[2] / 'frontend' / 'dashboard' / 'index.html')
