@@ -113,7 +113,7 @@ async def upload_pcap(file: UploadFile = File(...)):
                 edges[(e.src_ip, e.dst_ip)] += 1
             traffic = [{'bucket': k, 'events': buckets[k]} for k in sorted(buckets)]
             topology = [{'src': a, 'dst': b, 'count': c} for (a,b),c in edges.most_common(40)]
-        latest_analysis.update({'loaded': True, 'filename': file.filename, 'traffic': traffic, 'topology': topology, 'packets': packet_count, 'flows': pipeline.stats.accepted})
+        latest_analysis.update({'loaded': True, 'filename': file.filename, 'traffic': traffic, 'topology': topology, 'packets': packet_count, 'flows': pipeline.stats.accepted, 'bytes': sum(e.bytes for e in events)})
         classes = Counter(a.threat_class for a in found)
         severities = Counter(a.severity for a in found)
         top = found[0] if found else None
