@@ -1,0 +1,321 @@
+{
+  "schema_version": "1.1",
+  "dataset": "datasets/evaluation/synthetic_features.jsonl",
+  "dataset_sha256": "00b85135afd06896bdf61706603e6c998694c024c0fca9c9af348a5044d3a0fb",
+  "seed": 42,
+  "rows": 560,
+  "classes": [
+    "c2_beaconing",
+    "ddos",
+    "dga_dns_tunneling",
+    "encrypted_malware",
+    "exfiltration",
+    "normal",
+    "recon_port_scan"
+  ],
+  "split": {
+    "train": 336,
+    "validation": 112,
+    "test": 112,
+    "strategy": "stratified deterministic holdout"
+  },
+  "metrics": {
+    "validation": {
+      "accuracy": 1.0,
+      "precision_macro": 1.0,
+      "recall_macro": 1.0,
+      "f1_macro": 1.0,
+      "pr_auc_macro": 1.0,
+      "roc_auc_macro": 1.0,
+      "false_positive_rate_macro": 0.0,
+      "expected_calibration_error": 0.00017857142857147235,
+      "brier_multiclass": 3.1746031746031738e-06,
+      "confusion_matrix": [
+        [
+          16,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          16,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          16,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          16,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          16,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          16,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          16
+        ]
+      ],
+      "classification_report": {
+        "c2_beaconing": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "ddos": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "dga_dns_tunneling": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "encrypted_malware": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "exfiltration": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "normal": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "recon_port_scan": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 112.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 112.0
+        }
+      }
+    },
+    "test": {
+      "accuracy": 1.0,
+      "precision_macro": 1.0,
+      "recall_macro": 1.0,
+      "f1_macro": 1.0,
+      "pr_auc_macro": 1.0,
+      "roc_auc_macro": 1.0,
+      "false_positive_rate_macro": 0.0,
+      "expected_calibration_error": 0.005773809523809613,
+      "brier_multiclass": 0.002134920634920635,
+      "confusion_matrix": [
+        [
+          16,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          16,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          16,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          16,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          16,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          16,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          16
+        ]
+      ],
+      "classification_report": {
+        "c2_beaconing": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "ddos": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "dga_dns_tunneling": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "encrypted_malware": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "exfiltration": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "normal": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "recon_port_scan": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 16.0
+        },
+        "accuracy": 1.0,
+        "macro avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 112.0
+        },
+        "weighted avg": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1-score": 1.0,
+          "support": 112.0
+        }
+      }
+    }
+  },
+  "features": [
+    "ack",
+    "burstiness",
+    "byte_rate",
+    "bytes",
+    "bytes_per_second",
+    "destination_entropy",
+    "dst_port",
+    "duration_ms",
+    "event_count",
+    "fanout",
+    "flow_rate",
+    "graph_edges",
+    "graph_nodes",
+    "graph_unique_ports",
+    "host_destination_reuse",
+    "interarrival_cv",
+    "interarrival_mad_s",
+    "interarrival_mean_s",
+    "interarrival_median_s",
+    "interarrival_std_s",
+    "is_tcp",
+    "is_udp",
+    "packets",
+    "packets_per_second",
+    "src_port",
+    "syn",
+    "unique_destinations",
+    "unique_ports",
+    "window_span_s"
+  ]
+}

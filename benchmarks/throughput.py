@@ -3,7 +3,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path as _Path
 sys.path.insert(0, str(_Path(__file__).resolve().parents[1]))
-import argparse, json, statistics, time
+import argparse, json, statistics, time, os, platform, resource
 from datetime import datetime, timedelta, timezone
 from backend.ingestion.models import FlowEvent
 from backend.processing.pipeline import Pipeline
@@ -19,7 +19,9 @@ def main():
     for e in make(a.events):
         t=time.perf_counter(); pipe.process(e); lat.append((time.perf_counter()-t)*1000); total_bytes+=e.bytes
     elapsed=time.perf_counter()-start; rate=a.events/elapsed; mbps=(total_bytes*8/elapsed)/1e6
-    result={'events':a.events,'elapsed_s':elapsed,'events_per_s':rate,'mbps':mbps,'latency_ms':{'p50':statistics.median(lat),'p95':sorted(lat)[int(.95*len(lat))-1],'p99':sorted(lat)[int(.99*len(lat))-1]},'alerts':len(pipe.alerts.items)}
+    ru=resource.getrusage(resource.RUSAGE_SELF)
+    max_rss_mb=float(ru.ru_maxrss)/(1024 if platform.system()!='Darwin' else 1024*1024)
+    result={'schema_version':'1.1','events':a.events,'elapsed_s':elapsed,'events_per_s':rate,'mbps':mbps,'resource':{'cpu_user_s':ru.ru_utime,'cpu_system_s':ru.ru_stime,'max_rss_mb':max_rss_mb,'pid':os.getpid(),'platform':platform.platform()},'latency_ms':{'p50':statistics.median(lat),'p95':sorted(lat)[int(.95*len(lat))-1],'p99':sorted(lat)[int(.99*len(lat))-1]},'alerts':len(pipe.alerts.items)}
     if a.output: _Path(a.output).write_text(json.dumps(result, indent=2) + chr(10), encoding='utf-8')
     print(json.dumps(result,indent=2) if a.json else f"{a.events:,} events | {elapsed:.3f}s | {rate:.2f} events/s | {mbps:.4f} Mbps | p95 {result['latency_ms']['p95']:.3f} ms | alerts {result['alerts']}")
 
