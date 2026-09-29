@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "mode": "passive-read-only",
+  "pcap": "datasets/real/ctu13/ctu43-neris.pcap",
+  "packets_processed": 1000,
+  "events_failed": 0,
+  "network_socket_attempts": 0,
+  "transmission": false,
+  "decryption": false,
+  "claim": "IPXDR analysis path does not require an outbound network socket."
+}
