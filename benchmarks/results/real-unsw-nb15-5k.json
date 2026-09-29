@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "dataset": "UNSW-NB15",
+  "dataset_path": "datasets/real/unsw_nb15/UNSW_NB15_training-set.csv",
+  "dataset_sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+  "source_ground_truth": "UNSW-NB15 label column (0 normal, 1 attack)",
+  "replay_note": "Replay timestamps are generated because the selected released CSV split has no packet timestamp field.",
+  "sample_rows": 5000,
+  "seed": 42,
+  "confusion_matrix_labels": [
+    "normal",
+    "attack"
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      1597
+    ],
+    [
+      0,
+      3403
+    ]
+  ],
+  "tn": 0,
+  "fp": 1597,
+  "fn": 0,
+  "tp": 3403,
+  "precision": 0.6806,
+  "recall": 1.0,
+  "f1": 0.8099488277995954,
+  "classification_report": {
+    "0": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 1597.0
+    },
+    "1": {
+      "precision": 0.6806,
+      "recall": 1.0,
+      "f1-score": 0.8099488277995954,
+      "support": 3403.0
+    },
+    "accuracy": 0.6806,
+    "macro avg": {
+      "precision": 0.3403,
+      "recall": 0.5,
+      "f1-score": 0.4049744138997977,
+      "support": 5000.0
+    },
+    "weighted avg": {
+      "precision": 0.46321636,
+      "recall": 0.6806,
+      "f1-score": 0.5512511722004046,
+      "support": 5000.0
+    }
+  },
+  "detector_result_counts": {
+    "volumetric_ddos": 10000,
+    "udp_reflection_amplification": 5000,
+    "recon_port_scan": 5000,
+    "spoofed_source_flood": 5000,
+    "data_exfiltration": 5000,
+    "botnet_c2_beaconing": 5000
+  },
+  "provenance": {
+    "official_dataset": "https://research.unsw.edu.au/projects/unsw-nb15-dataset",
+    "mirror_used_for_download": "https://github.com/Nir-J/ML-Projects/blob/master/UNSW-Network_Packet_Classification/UNSW_NB15_training-set.csv"
+  }
+}

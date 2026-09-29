@@ -26,3 +26,7 @@ models/*.joblib
 models/*.json
 __pycache__/
 .pytest_cache/
+
+# Local real datasets (raw captures/CSVs stay out of git)
+datasets/real/*
+!datasets/real/MANIFEST.json

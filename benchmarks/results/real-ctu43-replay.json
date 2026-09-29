@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "dataset": "CTU-13 Scenario 43 Neris",
+  "pcap": "datasets/real/ctu13/ctu43-neris.pcap",
+  "packets_replayed": 20000,
+  "events_accepted": 20000,
+  "events_failed": 0,
+  "events_with_detector_results": 20000,
+  "detector_result_counts": {
+    "volumetric_ddos": 40000,
+    "udp_reflection_amplification": 20000,
+    "recon_port_scan": 20000,
+    "spoofed_source_flood": 20000,
+    "data_exfiltration": 20000,
+    "botnet_c2_beaconing": 20000,
+    "dga_domain": 5684,
+    "dns_tunneling": 5684
+  },
+  "ground_truth_note": "This public PCAP is botnet-only traffic; it is suitable for integration/coverage replay but cannot establish precision or false-positive rate without benign traffic labels.",
+  "source": "https://www.stratosphereips.org/datasets-ctu13"
+}

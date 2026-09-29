@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Real public dataset validation and replay provenance for IPXDR",
+  "policy": "Raw datasets are downloaded locally for evaluation and are not committed to the repository.",
+  "sources": [
+    {
+      "id": "ctu13-s43",
+      "dataset": "CTU-13 Scenario 43 / Neris",
+      "publisher": "Stratosphere Laboratory / CTU",
+      "official_url": "https://www.stratosphereips.org/datasets-ctu13",
+      "artifact": "datasets/real/ctu13/ctu43-neris.pcap",
+      "sha256": "189b38247b614ae51feee0e75b360552eecdee0b68843b88c7d9ed88d7be7631",
+      "bytes": 36261479,
+      "ground_truth": "botnet-only PCAP; public scenario documentation identifies infected host and labels in accompanying flow data",
+      "use": "real-PCAP parser/pipeline replay; not sufficient alone for precision/FPR"
+    },
+    {
+      "id": "unsw-nb15-train",
+      "dataset": "UNSW-NB15 training set",
+      "publisher": "UNSW Canberra / ACCS",
+      "official_url": "https://research.unsw.edu.au/projects/unsw-nb15-dataset",
+      "artifact": "datasets/real/unsw_nb15/UNSW_NB15_training-set.csv",
+      "download_mirror": "https://github.com/Nir-J/ML-Projects/blob/master/UNSW-Network_Packet_Classification/UNSW_NB15_training-set.csv",
+      "sha256": "bec7dd5ec88dc2a0ccc7a07879d338395ed7421750f675fd0339e07dfe0648fa",
+      "bytes": 32293018,
+      "rows": 175341,
+      "ground_truth": "official label column; 0 normal / 1 attack",
+      "use": "real labelled-flow integration replay; current adapter result is diagnostic, not claimed as final detector accuracy"
+    },
+    {
+      "id": "cic-ids2017",
+      "dataset": "CIC-IDS2017",
+      "publisher": "Canadian Institute for Cybersecurity / UNB",
+      "official_url": "https://www.unb.ca/cic/datasets/ids-2017.html",
+      "status": "source registered; raw download not stored because the official download endpoint currently requires its form"
+    },
+    {
+      "id": "ugr16",
+      "dataset": "UGR'16",
+      "publisher": "University of Granada NESG",
+      "official_url": "https://nesg.ugr.es/nesg-ugr16/",
+      "status": "source registered; NetFlow files to be added as a separate real-flow validation set"
+    }
+  ]
+}
