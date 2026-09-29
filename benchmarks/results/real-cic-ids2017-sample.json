@@ -19,54 +19,47 @@
   "replay_note": "The sample is flow-feature CSV, not PCAP. It lacks source/destination IPs and raw protocol/port fields; the adapter uses fixed documentation IPs and derives only coarse protocol/port indicators. Metrics therefore characterize adapter/pipeline behavior, not native packet detection.",
   "confusion_matrix": [
     [
-      5,
-      2001
+      2006,
+      0
     ],
     [
-      2,
-      2992
+      2994,
+      0
     ]
   ],
-  "tn": 5,
-  "fp": 2001,
-  "fn": 2,
-  "tp": 2992,
-  "precision": 0.5992389345083117,
-  "recall": 0.9993319973279893,
-  "f1": 0.7492174784024039,
+  "tn": 2006,
+  "fp": 0,
+  "fn": 2994,
+  "tp": 0,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
   "classification_report": {
     "0": {
-      "precision": 0.7142857142857143,
-      "recall": 0.0024925224327018943,
-      "f1-score": 0.004967709885742673,
+      "precision": 0.4012,
+      "recall": 1.0,
+      "f1-score": 0.5726520125606623,
       "support": 2006.0
     },
     "1": {
-      "precision": 0.5992389345083117,
-      "recall": 0.9993319973279893,
-      "f1-score": 0.7492174784024039,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
       "support": 2994.0
     },
-    "accuracy": 0.5994,
+    "accuracy": 0.4012,
     "macro avg": {
-      "precision": 0.656762324397013,
-      "recall": 0.5009122598803456,
-      "f1-score": 0.3770925941440733,
+      "precision": 0.2006,
+      "recall": 0.5,
+      "f1-score": 0.28632600628033117,
       "support": 5000.0
     },
     "weighted avg": {
-      "precision": 0.6453957025550057,
-      "recall": 0.5994,
-      "f1-score": 0.45062447127351946,
+      "precision": 0.16096143999999998,
+      "recall": 0.4012,
+      "f1-score": 0.22974798743933775,
       "support": 5000.0
     }
   },
-  "detector_result_counts": {
-    "volumetric_ddos": 10000,
-    "udp_reflection_amplification": 5000,
-    "recon_port_scan": 5000,
-    "spoofed_source_flood": 5000,
-    "data_exfiltration": 5000,
-    "botnet_c2_beaconing": 5000
-  }
+  "detector_result_counts": {}
 }

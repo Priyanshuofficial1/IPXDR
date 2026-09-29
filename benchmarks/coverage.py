@@ -29,7 +29,7 @@ def scenarios():
                        dst_port=443, packets=100, bytes=6000, duration_ms=10, tcp_flags=["S"]) for i in range(24)],
         "c2_beaconing": [event(i, src_ip="10.0.0.60", dst_ip="203.0.113.60",
                                src_port=5000, dst_port=443, packets=2, bytes=200,
-                               duration_ms=100) for i in range(24)],
+                               duration_ms=100, timestamp=BASE+timedelta(seconds=i*5)) for i in range(24)],
         "dga_dns_tunneling": [event(i, src_ip="10.0.0.70", dst_ip="198.51.100.53",
                                     src_port=50000+i, dst_port=53, protocol="UDP",
                                     packets=2, bytes=700,

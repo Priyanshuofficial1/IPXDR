@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "validation": "controlled_native_pcap",
+  "pcap": "benchmarks/results/native-mixed-lab.pcap",
+  "packets_generated": 128,
+  "events_processed": 128,
+  "events_failed": 0,
+  "ground_truth": "source-IP labels assigned by the local generator",
+  "benign_alerts": 0,
+  "attack_alerts": 41,
+  "benign_false_positive_rate": 0.0,
+  "per_source": {
+    "10.77.0.10": {
+      "label": "benign",
+      "events": 24,
+      "alerts": 0,
+      "detected_classes": {}
+    },
+    "10.77.0.20": {
+      "label": "ddos",
+      "events": 30,
+      "alerts": 23,
+      "detected_classes": {
+        "volumetric_ddos": 23
+      }
+    },
+    "10.77.0.21": {
+      "label": "c2",
+      "events": 16,
+      "alerts": 5,
+      "detected_classes": {
+        "botnet_c2_beaconing": 5
+      }
+    },
+    "10.77.0.22": {
+      "label": "dns_tunnel",
+      "events": 18,
+      "alerts": 8,
+      "detected_classes": {
+        "dga_domain": 18,
+        "dns_tunneling": 18,
+        "botnet_c2_beaconing": 7
+      }
+    },
+    "10.77.0.23": {
+      "label": "recon",
+      "events": 24,
+      "alerts": 0,
+      "detected_classes": {
+        "recon_port_scan": 4
+      }
+    },
+    "10.77.0.24": {
+      "label": "exfil",
+      "events": 16,
+      "alerts": 5,
+      "detected_classes": {
+        "botnet_c2_beaconing": 5
+      }
+    }
+  },
+  "limitations": "Controlled lab PCAP; not a public-dataset accuracy claim. Benign traffic is intentionally simple."
+}

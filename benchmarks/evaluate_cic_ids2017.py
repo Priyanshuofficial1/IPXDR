@@ -57,7 +57,8 @@ def main():
  for i,(_,r) in enumerate(df.iterrows()):
   e=to_event(r,i);p.process(e);alert=p.alerts.items[-1] if p.alerts.items and p.alerts.items[-1].flow_id==e.event_id else None
   y.append(int(r.binary_label));pred.append(int(alert is not None))
-  for dr in p.last_detector_results:counts[dr.threat_class]=counts.get(dr.threat_class,0)+1
+  for dr in p.last_detector_results:
+   if dr.score >= 0.5: counts[dr.threat_class]=counts.get(dr.threat_class,0)+1
  cm=confusion_matrix(y,pred,labels=[0,1]);tn,fp,fn,tp=[int(x) for x in cm.ravel()]
  out={'schema_version':'1.0','dataset':'CIC-IDS2017','artifact':str(a.csv),'artifact_sha256':sha256(a.csv),'source_sample':'https://github.com/Western-OC2-Lab/Intrusion-Detection-System-Using-Machine-Learning/blob/main/data/CICIDS2017_sample.csv','source_official':'https://www.unb.ca/cic/datasets/ids-2017.html','sample_rows':len(df),'label_counts':{str(k):int(v) for k,v in label.value_counts().items()},'binary_mapping':'BENIGN=0; all other published labels=1','replay_note':'The sample is flow-feature CSV, not PCAP. It lacks source/destination IPs and raw protocol/port fields; the adapter uses fixed documentation IPs and derives only coarse protocol/port indicators. Metrics therefore characterize adapter/pipeline behavior, not native packet detection.','confusion_matrix':cm.tolist(),'tn':tn,'fp':fp,'fn':fn,'tp':tp,'precision':float(precision_score(y,pred,zero_division=0)),'recall':float(recall_score(y,pred,zero_division=0)),'f1':float(f1_score(y,pred,zero_division=0)),'classification_report':classification_report(y,pred,output_dict=True,zero_division=0),'detector_result_counts':counts}
  a.output.parent.mkdir(parents=True,exist_ok=True);a.output.write_text(json.dumps(out,indent=2));print(json.dumps({k:out[k] for k in ['sample_rows','tn','fp','fn','tp','precision','recall','f1']},indent=2))

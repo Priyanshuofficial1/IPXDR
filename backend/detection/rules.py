@@ -29,13 +29,23 @@ def detect(events: list[NormalizedFlow]) -> list[DetectorResult]:
     dns_count=sum(1 for e in events if e.dns and e.dns.get('query'))
     non_dns_udp=sum(1 for e in events if e.protocol=='UDP' and not (e.dns and e.dns.get('query')))
     udp_effective_ratio=non_dns_udp/n
-    udp_score=min(1, max(0,(udp_effective_ratio-.55)/.4) + .15*min(1,f['flow_rate']/500)) if n>=8 else 0.0
-    scan_score=min(1,max(0,(ports-3)/18)+(max(0,dsts-3)/45)) if n>=10 else 0.0
-    spoof_score=min(1,src_entropy/5.0) if n>=20 else 0.0
-    # Reflection/amplification heuristic: fan-in from many sources to one destination plus large UDP packets.
+    # A UDP flood requires both UDP dominance and materially high packet throughput.
+    # A single UDP flow/second is normal traffic, not a flood.
+    packet_rate=packets_mean*f['flow_rate']
+    udp_intensity=min(1.0,max(0.0,(packet_rate-20.0)/180.0))
+    udp_score=min(1.0,max(0.0,(udp_effective_ratio-.70)/.30)*udp_intensity) if n>=8 else 0.0
+    # Recon requires a meaningful fan-out/fan-port pattern rather than merely a few ports.
+    port_signal=max(0.0,min(1.0,(ports-8)/16.0))
+    dst_signal=max(0.0,min(1.0,(dsts-4)/20.0))
+    scan_score=min(1.0,0.65*port_signal+0.35*dst_signal) if n>=10 else 0.0
+    spoof_score=min(1,src_entropy/5.0) if n>=20 and len(set(sources))>=5 else 0.0
+    # Reflection requires genuine many-source fan-in. Large UDP packets alone are not enough.
     dst_counts=Counter(e.dst_ip for e in events); max_fanin=max(dst_counts.values()) if dst_counts else 0
-    udp_big=max(0.0,min(1.0,(bytes_mean-300)/1200))
-    reflection=min(1.0, max(0,(len(set(sources))-5)/40) + max(0,(max_fanin/n)-.5) + .45*udp_big) if n>=20 and udp else 0.0
+    unique_sources=len(set(sources))
+    udp_big=max(0.0,min(1.0,(bytes_mean-600)/1400))
+    fanin_signal=max(0.0,min(1.0,(max_fanin/n-.50)/.40))
+    source_signal=max(0.0,min(1.0,(unique_sources-5)/15.0))
+    reflection=min(1.0,0.45*source_signal+0.35*fanin_signal+0.20*udp_big) if n>=20 and udp and unique_sources>=6 and max_fanin/n>=.5 else 0.0
     s=perf_counter(); out.append(_result('syn_flood','volumetric_ddos',syn_score,[f'SYN-only ratio={syn_ratio:.2f}',f'events={n}'],['syn','event_count'],s))
     s=perf_counter(); out.append(_result('udp_flood','volumetric_ddos',udp_score,[f'non-DNS UDP ratio={udp_effective_ratio:.2f}',f'flow_rate={f["flow_rate"]:.1f}/s'],['is_udp','flow_rate'],s))
     s=perf_counter(); out.append(_result('udp_reflection','udp_reflection_amplification',reflection,[f'UDP fan-in sources={len(set(sources))}',f'max destination fan-in={max_fanin}',f'mean bytes/event={bytes_mean:.1f}'],['source_fan_in','destination_fan_in','mean_bytes'],s))
@@ -45,10 +55,12 @@ def detect(events: list[NormalizedFlow]) -> list[DetectorResult]:
     ratio=outbound/max(1,inbound) if outbound else 0.0
     exfil=min(1,max(0,(log2(max(1,ratio))-2)/8)) if outbound and inbound else 0.0
     s=perf_counter(); out.append(_result('exfil_asymmetry','data_exfiltration',exfil,[f'outbound_bytes={outbound}',f'inbound_bytes={inbound}',f'outbound_inbound_ratio={ratio:.2f}'],['directional_bytes','byte_ratio'],s))
-    cv=f['interarrival_cv']; periodic=max(0,1-cv) if n>=8 else 0.0
-    # Periodicity alone is weak evidence; require repeated observations and keep score below certainty.
-    periodic=min(.92,periodic) if n>=8 else 0.0
-    s=perf_counter(); out.append(_result('c2_beacon','botnet_c2_beaconing',periodic,[f'IAT CV={cv:.3f}',f'events={n}'],['interarrival_cv','interarrival_median_s'],s))
+    cv=f['interarrival_cv']; iat_median=f['interarrival_median_s']
+    # Periodicity alone is insufficient: ordinary polling/telemetry is also periodic.
+    # Require a sustained sequence and a non-trivial beacon interval.
+    periodic=max(0.0,1-cv) if n>=12 and 2.0 <= iat_median <= 300.0 else 0.0
+    periodic=min(.82,periodic) if n>=12 else 0.0
+    s=perf_counter(); out.append(_result('c2_beacon','botnet_c2_beaconing',periodic,[f'IAT CV={cv:.3f}',f'IAT median={iat_median:.1f}s',f'events={n}'],['interarrival_cv','interarrival_median_s'],s))
     dns=extract_dns_features(events)
     if dns['dns_query_count']:
         dga=min(1,max(0,.45*(dns['dns_avg_label_entropy']-3.0)/2 + .55*dns['dns_avg_ngram_risk']))

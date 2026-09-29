@@ -18,7 +18,6 @@
       "events": 24,
       "alerts": 17,
       "detected_classes": [
-        "botnet_c2_beaconing",
         "volumetric_ddos"
       ],
       "errors": [],
@@ -29,7 +28,7 @@
       "target_class": "botnet_c2_beaconing",
       "provenance": "controlled_synthetic_lab",
       "events": 24,
-      "alerts": 17,
+      "alerts": 13,
       "detected_classes": [
         "botnet_c2_beaconing"
       ],
@@ -43,9 +42,7 @@
       "events": 24,
       "alerts": 24,
       "detected_classes": [
-        "botnet_c2_beaconing",
-        "dns_tunneling",
-        "udp_reflection_amplification"
+        "dns_tunneling"
       ],
       "errors": [],
       "covered": true
@@ -55,9 +52,8 @@
       "target_class": "encrypted_malware",
       "provenance": "controlled_synthetic_lab",
       "events": 24,
-      "alerts": 17,
+      "alerts": 0,
       "detected_classes": [
-        "botnet_c2_beaconing",
         "encrypted_malware"
       ],
       "errors": [],
@@ -68,9 +64,8 @@
       "target_class": "recon_port_scan",
       "provenance": "controlled_synthetic_lab",
       "events": 24,
-      "alerts": 17,
+      "alerts": 5,
       "detected_classes": [
-        "botnet_c2_beaconing",
         "recon_port_scan"
       ],
       "errors": [],

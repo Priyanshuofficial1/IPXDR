@@ -29,22 +29,22 @@
       "type": "labelled flow-feature replay",
       "samples": 5000,
       "ground_truth": "label 0 normal / 1 attack",
-      "precision": 0.6811536150610855,
-      "recall": 0.9994122832794593,
-      "f1": 0.8101476893758933,
-      "fpr": 0.9968691296180339,
-      "limitations": "generated timestamps; reconstructed flow semantics; strong false-positive behavior"
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "limitations": "generated timestamps/reconstructed flow semantics; after detector calibration no false positives but no attack alerts, so not a detector accuracy claim"
     },
     {
       "dataset": "CIC-IDS2017 public sample (5k stratified)",
       "type": "labelled flow-feature replay",
       "samples": 5000,
       "ground_truth": "BENIGN vs non-BENIGN labels",
-      "precision": 0.5992389345083117,
-      "recall": 0.9993319973279893,
-      "f1": 0.7492174784024039,
-      "fpr": 0.9975074775672981,
-      "limitations": "public sample lacks raw IP/protocol/port fields; adapter reconstructs required fields; not PCAP replay"
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "fpr": 0.0,
+      "limitations": "reconstructed flow-feature replay; after detector calibration no false positives but no attack alerts, so not a detector accuracy claim"
     },
     {
       "dataset": "UGR'16",
@@ -56,6 +56,17 @@
       "f1": null,
       "fpr": null,
       "limitations": "accessible author feature data is aggregated at one-minute intervals and not directly compatible with FlowEvent; no detector accuracy claim"
+    },
+    {
+      "dataset": "Controlled mixed native PCAP",
+      "type": "controlled native PCAP replay",
+      "samples": 128,
+      "ground_truth": "source-IP labels assigned by local generator",
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "fpr": 0.0,
+      "limitations": "lab-generated benign + attack traffic; 0 benign alerts and 41 attack-source alerts; not public-dataset accuracy"
     }
   ]
 }

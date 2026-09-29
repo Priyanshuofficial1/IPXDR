@@ -40,8 +40,8 @@ The software validation harness is complete for controlled lab fixtures and now 
 - Production six-family controlled coverage remains reproducible through `benchmarks/coverage.py`.
 - Synthetic labelled evaluation remains 560 samples / 7 classes with test macro F1 1.0000; explicitly controlled/lab only.
 - CTU-13 Scenario 43 replay processed 20,000/20,000 packets with 0 failures.
-- UNSW-NB15 5,000-row diagnostic now evaluates the actual production alert decision: TN=5, FP=1592, FN=2, TP=3401, precision=0.6812, recall=0.9994, F1=0.8101.
-- CIC-IDS2017 public labelled-flow sample: 56,661 rows acquired locally; 5,000-row stratified production replay: TN=5, FP=2001, FN=2, TP=2992, precision=0.5992, recall=0.9993, F1=0.7492.
+- UNSW-NB15 5,000-row reconstructed-flow diagnostic after calibration changes: TN=1597, FP=0, FN=3403, TP=0. This confirms the CSV replay no longer produces the previous periodicity-driven false positives, but it also shows that the selected timestamp reconstruction cannot exercise the production attack detectors reliably; it is therefore not an accuracy claim.
+- CIC-IDS2017 public labelled-flow sample: 56,661 rows acquired locally; 5,000-row stratified reconstructed-flow replay after calibration: TN=2006, FP=0, FN=2994, TP=0. The result is treated as adapter compatibility evidence, not detector accuracy, because native packet/flow semantics are absent.
 - Dashboard smoke test returned HTTP 200 and live API polling endpoints returned HTTP 200. WebSocket `/ws/alerts` was initially blocked because the runtime lacked a WebSocket implementation; `websockets>=13` is now a declared dependency and the live handshake was reverified as accepted.
 - Malformed PCAP upload errors no longer expose parser/library exception details; a regression test covers this boundary.
 - 50,000-event engineering benchmark completed on WSL2: 228.806 events/s, 1.006 Mbps, p50 3.931 ms, p95 8.407 ms, p99 11.503 ms, max RSS 209.238 MB.
@@ -57,6 +57,13 @@ The software validation harness is complete for controlled lab fixtures and now 
 ### Known limitations
 - Synthetic metrics are not real-world accuracy.
 - CTU-13 Scenario 43 is not a benign/attack-balanced benchmark and cannot establish FPR by itself.
-- Current reconstructed UNSW/CIC diagnostics show very high false-positive rates and should not be used as production accuracy claims.
+- After the detector calibration change, reconstructed UNSW/CIC diagnostics no longer show the earlier false-positive flood, but they also fail to reproduce attack decisions reliably. Native timestamped PCAP/flow evidence is the appropriate calibration source.
 - WSL2 throughput is an engineering measurement for this environment, not a capacity guarantee.
 - Native timestamped, bidirectional/directional flow evidence is still needed for defensible threshold calibration.
+
+### New native-PCAP calibration evidence
+- `benchmarks/native_mixed_pcap.py` generates a controlled mixed native PCAP and replays it through the real `PCAPIngestor -> Pipeline` path.
+- Latest run: 128 packets/events, 0 processing failures, 0 benign alerts, 41 attack-source alerts.
+- Controlled-source detections: SYN/volumetric DDoS, C2 beaconing, DNS tunneling/DGA, and recon were observed on their labelled attack sources.
+- This is controlled lab evidence only; it is not a public-dataset accuracy claim and does not validate physical one-way deployment.
+- Detector calibration changes now require packet/flow intensity for UDP-flood scoring, stronger fan-in conditions for reflection, meaningful fan-out for recon, and sustained non-trivial periodicity for C2 instead of periodicity alone.

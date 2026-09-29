@@ -63,7 +63,8 @@ def main():
         alert=pipe.alerts.items[-1] if pipe.alerts.items and pipe.alerts.items[-1].flow_id == f"unsw-replay-{i}" else None
         attack=alert is not None
         y_true.append(int(row["binary_label"])); y_pred.append(int(attack))
-        for r in results: counts[r.threat_class]=counts.get(r.threat_class,0)+1
+        for r in results:
+            if r.score >= 0.5: counts[r.threat_class]=counts.get(r.threat_class,0)+1
     cm=confusion_matrix(y_true,y_pred,labels=[0,1]); tn,fp,fn,tp=[int(x) for x in cm.ravel()]
     result={
       "schema_version":"1.0","dataset":"UNSW-NB15","dataset_path":str(a.csv),
