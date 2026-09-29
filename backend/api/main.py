@@ -128,7 +128,8 @@ async def upload_pcap(file: UploadFile = File(...)):
         raise
     except Exception as exc:
         pipeline.reset_session()
-        raise HTTPException(400, f'PCAP analysis failed: {exc}') from exc
+        # Do not expose parser/library internals or local paths to uploaders.
+        raise HTTPException(400, 'PCAP analysis failed: malformed or unsupported capture') from exc
     finally:
         try: os.unlink(temp_path)
         except OSError: pass

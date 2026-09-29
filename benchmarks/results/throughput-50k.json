@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.1",
+  "events": 50000,
+  "elapsed_s": 218.52548598599992,
+  "events_per_s": 228.80626382958053,
+  "mbps": 1.005832335794836,
+  "resource": {
+    "cpu_user_s": 224.06715,
+    "cpu_system_s": 1.8683589999999999,
+    "max_rss_mb": 209.23828125,
+    "pid": 4182,
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.42"
+  },
+  "latency_ms": {
+    "p50": 3.9312559999871155,
+    "p95": 8.407081000086691,
+    "p99": 11.502801000006002
+  },
+  "alerts": 5000
+}

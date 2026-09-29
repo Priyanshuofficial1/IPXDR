@@ -1,0 +1,174 @@
+{
+  "schema_version": "1.0",
+  "dataset": "UNSW-NB15",
+  "sample_rows": 2000,
+  "seed": 42,
+  "purpose": "diagnostic calibration; no production threshold change",
+  "replay_spacing_seconds": {
+    "0.1": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "1": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "5": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "10": {
+      "tn": 639,
+      "fp": 0,
+      "fn": 1361,
+      "tp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "score_thresholds_at_1s": {
+    "0.5": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "0.6": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "0.7": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "0.75": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "0.8": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "0.85": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "0.9": {
+      "tn": 1,
+      "fp": 638,
+      "fn": 6,
+      "tp": 1355,
+      "precision": 0.6798795785248369,
+      "recall": 0.9955914768552535,
+      "f1": 0.8079904591532499
+    },
+    "0.95": {
+      "tn": 7,
+      "fp": 632,
+      "fn": 12,
+      "tp": 1349,
+      "precision": 0.6809692074709742,
+      "recall": 0.991182953710507,
+      "f1": 0.8073010173548774
+    },
+    "0.99": {
+      "tn": 639,
+      "fp": 0,
+      "fn": 1361,
+      "tp": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+    }
+  },
+  "detector_score_summary": {
+    "syn_flood": {
+      "normal_mean": 0.0,
+      "attack_mean": 0.0,
+      "normal_ge_0.5": 0,
+      "attack_ge_0.5": 0
+    },
+    "udp_flood": {
+      "normal_mean": 0.00030477097798701206,
+      "attack_mean": 0.00030383196634106165,
+      "normal_ge_0.5": 0,
+      "attack_ge_0.5": 0
+    },
+    "udp_reflection": {
+      "normal_mean": 0.9395931142410017,
+      "attack_mean": 0.9416238060249816,
+      "normal_ge_0.5": 632,
+      "attack_ge_0.5": 1349
+    },
+    "recon_port_scan": {
+      "normal_mean": 0.0,
+      "attack_mean": 0.0,
+      "normal_ge_0.5": 0,
+      "attack_ge_0.5": 0
+    },
+    "spoof_entropy": {
+      "normal_mean": 0.0,
+      "attack_mean": 0.0,
+      "normal_ge_0.5": 0,
+      "attack_ge_0.5": 0
+    },
+    "exfil_asymmetry": {
+      "normal_mean": 0.0,
+      "attack_mean": 0.0,
+      "normal_ge_0.5": 0,
+      "attack_ge_0.5": 0
+    },
+    "c2_beacon": {
+      "normal_mean": 0.9185602503912363,
+      "attack_mean": 0.9159441587068331,
+      "normal_ge_0.5": 638,
+      "attack_ge_0.5": 1355
+    }
+  },
+  "finding": "UDP reflection and C2 periodicity scores remain high for both normal and attack rows under reconstructed flow replay; replay spacing changes do not resolve this until windows exceed the 60-second detector context. The primary limitation is missing original timestamps/direction/packet identity in the selected CSV, not evidence that these thresholds generalize to real traffic.",
+  "recommendation": "Use native timestamped flow/PCAP validation for calibration. Do not tune production thresholds against this reconstructed replay alone."
+}

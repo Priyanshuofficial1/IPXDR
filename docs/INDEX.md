@@ -24,3 +24,5 @@ The PRD defines product acceptance. The TRD defines the technical baseline used 
 - `DEMO.md` — SIH26145 demonstration and benchmark commands.
 - `INGESTION.md` — PCAP and flow-export adapter boundaries.
 - `SECURITY.md` — passive invariant and API hardening.
+
+- `CROSS_DATASET_VALIDATION.md` — current cross-dataset evidence and validation boundaries.

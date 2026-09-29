@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "timestamp_utc": "2026-09-29T18:18:51.162469+00:00",
+  "server": "uvicorn backend.api.main:app",
+  "bind": "127.0.0.1:8000",
+  "dashboard": {
+    "url": "http://127.0.0.1:8000/dashboard",
+    "http_status": 200,
+    "title": "IPXDR // COMMAND CENTER"
+  },
+  "endpoints": {
+    "/": 200,
+    "/health": 200,
+    "/status": 200,
+    "/metrics": 200,
+    "/alerts": 200,
+    "/hosts": 200,
+    "/analysis/latest": 200,
+    "/dashboard": 200
+  },
+  "dashboard_polling": {
+    "/metrics": 200,
+    "/alerts?limit=100": 200,
+    "/hosts": 200,
+    "/analysis/latest": 200
+  },
+  "websocket": {
+    "path": "/ws/alerts",
+    "handshake": "accepted",
+    "server_log": "WebSocket /ws/alerts [accepted]",
+    "note": "Browser smoke connected successfully after adding the websockets runtime dependency."
+  },
+  "upload_chain": {
+    "integration_test": "PASS",
+    "test": "test_pcap_upload_uses_capture_data",
+    "note": "Full upload\u2192PCAP parser\u2192Pipeline\u2192alerts/analysis chain is covered by TestClient; live browser file chooser was not automated."
+  },
+  "live_telemetry": {
+    "initial_packets": 0,
+    "initial_flows": 0,
+    "initial_alerts": 0
+  },
+  "limitations": [
+    "No live external traffic was generated; monitoring remained local/passive.",
+    "The browser smoke verified dashboard/API/WebSocket availability; PCAP upload was verified by the existing integration test rather than browser file-chooser automation."
+  ]
+}

@@ -58,7 +58,10 @@ def main():
     for i,(_,row) in enumerate(df.iterrows()):
         pipe.process(to_event(row,i))
         results=pipe.last_detector_results
-        attack=any(r.threat_class.lower() not in {"normal","benign"} for r in results)
+        # Evaluate the production alert decision, not the presence of diagnostic
+        # detector results. Rules emit zero-score results for every window.
+        alert=pipe.alerts.items[-1] if pipe.alerts.items and pipe.alerts.items[-1].flow_id == f"unsw-replay-{i}" else None
+        attack=alert is not None
         y_true.append(int(row["binary_label"])); y_pred.append(int(attack))
         for r in results: counts[r.threat_class]=counts.get(r.threat_class,0)+1
     cm=confusion_matrix(y_true,y_pred,labels=[0,1]); tn,fp,fn,tp=[int(x) for x in cm.ravel()]

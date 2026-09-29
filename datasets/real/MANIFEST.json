@@ -32,14 +32,32 @@
       "dataset": "CIC-IDS2017",
       "publisher": "Canadian Institute for Cybersecurity / UNB",
       "official_url": "https://www.unb.ca/cic/datasets/ids-2017.html",
-      "status": "source registered; raw download not stored because the official download endpoint currently requires its form"
+      "status": "labelled flow-feature sample acquired and evaluated; full official MachineLearningCSV distribution not acquired",
+      "artifact": "datasets/real/cic_ids2017/CICIDS2017_sample.csv",
+      "sha256": "03ba3626a0f9bb73b90c56772893e68b0577285130891cd7d811542c17b032dd",
+      "bytes": 19868205,
+      "rows": 56661,
+      "labels": {
+        "BENIGN": 22731,
+        "DoS": 19035,
+        "PortScan": 7946,
+        "BruteForce": 2767,
+        "WebAttack": 2180,
+        "Bot": 1966,
+        "Infiltration": 36
+      },
+      "sample_source": "https://github.com/Western-OC2-Lab/Intrusion-Detection-System-Using-Machine-Learning/blob/main/data/CICIDS2017_sample.csv",
+      "use": "labelled flow-feature adapter/pipeline validation; not native PCAP replay"
     },
     {
       "id": "ugr16",
       "dataset": "UGR'16",
       "publisher": "University of Granada NESG",
       "official_url": "https://nesg.ugr.es/nesg-ugr16/",
-      "status": "source registered; NetFlow files to be added as a separate real-flow validation set"
+      "status": "official site returns HTTP 403 to automated access; author-maintained UGR16 feature-data repository is accessible, but its one-minute aggregate feature vectors are not directly compatible with IPXDR FlowEvent semantics",
+      "accessible_mirror": "https://github.com/josecamachop/UGR16_FeatureData",
+      "accessible_artifact": "UGR16v3.Xtest.csv + UGR16v3.Ytest.csv",
+      "use": "provenance/compatibility review only; no detector accuracy claim"
     }
   ]
 }

@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "purpose": "cross-dataset evidence summary; metrics are not combined across incomparable datasets",
+  "datasets": [
+    {
+      "dataset": "Synthetic/lab",
+      "type": "controlled synthetic/lab",
+      "samples": 560,
+      "ground_truth": "controlled labels",
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "fpr": 0.0,
+      "limitations": "synthetic fixture; not real-world accuracy"
+    },
+    {
+      "dataset": "CTU-13 Scenario 43 / Neris",
+      "type": "real PCAP replay",
+      "samples": 20000,
+      "ground_truth": "botnet-oriented scenario; no benign control labels in replay",
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "fpr": null,
+      "limitations": "integration/replay evidence only; insufficient benign ground truth for precision/FPR"
+    },
+    {
+      "dataset": "UNSW-NB15 training CSV (5k stratified)",
+      "type": "labelled flow-feature replay",
+      "samples": 5000,
+      "ground_truth": "label 0 normal / 1 attack",
+      "precision": 0.6811536150610855,
+      "recall": 0.9994122832794593,
+      "f1": 0.8101476893758933,
+      "fpr": 0.9968691296180339,
+      "limitations": "generated timestamps; reconstructed flow semantics; strong false-positive behavior"
+    },
+    {
+      "dataset": "CIC-IDS2017 public sample (5k stratified)",
+      "type": "labelled flow-feature replay",
+      "samples": 5000,
+      "ground_truth": "BENIGN vs non-BENIGN labels",
+      "precision": 0.5992389345083117,
+      "recall": 0.9993319973279893,
+      "f1": 0.7492174784024039,
+      "fpr": 0.9975074775672981,
+      "limitations": "public sample lacks raw IP/protocol/port fields; adapter reconstructs required fields; not PCAP replay"
+    },
+    {
+      "dataset": "UGR'16",
+      "type": "one-minute aggregate feature data",
+      "samples": null,
+      "ground_truth": "labelled attack counts available",
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "fpr": null,
+      "limitations": "accessible author feature data is aggregated at one-minute intervals and not directly compatible with FlowEvent; no detector accuracy claim"
+    }
+  ]
+}

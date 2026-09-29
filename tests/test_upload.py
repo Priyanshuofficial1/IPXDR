@@ -13,3 +13,12 @@ def test_pcap_upload_uses_capture_data(tmp_path):
         d=r.json(); assert d['packets']==1 and d['flows']==1 and d['filename']=='sample.pcap'
         a=c.get('/analysis/latest').json(); assert a['loaded'] is True and a['packets']==1
         hosts=c.get('/hosts').json(); assert any(x['src_ip']=='192.0.2.1' for x in hosts)
+
+
+def test_malformed_pcap_does_not_leak_parser_details():
+    from backend.api import main
+    with TestClient(main.app) as c:
+        r=c.post('/upload/pcap',files={'file':('broken.pcap',b'not-a-pcap','application/octet-stream')})
+        assert r.status_code==400
+        assert 'malformed or unsupported capture' in r.json()['detail']
+        assert 'Traceback' not in r.text
