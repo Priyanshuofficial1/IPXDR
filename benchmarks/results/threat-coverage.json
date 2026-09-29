@@ -1,0 +1,93 @@
+{
+  "schema_version": "1.0",
+  "dataset_type": "synthetic_lab",
+  "warning": "Not real-world accuracy",
+  "required_families": [
+    "ddos",
+    "c2_beaconing",
+    "dga_dns_tunneling",
+    "encrypted_malware",
+    "recon_port_scan",
+    "exfiltration"
+  ],
+  "results": [
+    {
+      "scenario": "ddos",
+      "target_class": "volumetric_ddos",
+      "provenance": "controlled_synthetic_lab",
+      "events": 24,
+      "alerts": 17,
+      "detected_classes": [
+        "botnet_c2_beaconing",
+        "volumetric_ddos"
+      ],
+      "errors": [],
+      "covered": true
+    },
+    {
+      "scenario": "c2_beaconing",
+      "target_class": "botnet_c2_beaconing",
+      "provenance": "controlled_synthetic_lab",
+      "events": 24,
+      "alerts": 17,
+      "detected_classes": [
+        "botnet_c2_beaconing"
+      ],
+      "errors": [],
+      "covered": true
+    },
+    {
+      "scenario": "dga_dns_tunneling",
+      "target_class": "dns_tunneling",
+      "provenance": "controlled_synthetic_lab",
+      "events": 24,
+      "alerts": 24,
+      "detected_classes": [
+        "botnet_c2_beaconing",
+        "dns_tunneling",
+        "udp_reflection_amplification"
+      ],
+      "errors": [],
+      "covered": true
+    },
+    {
+      "scenario": "encrypted_malware",
+      "target_class": "encrypted_malware",
+      "provenance": "controlled_synthetic_lab",
+      "events": 24,
+      "alerts": 17,
+      "detected_classes": [
+        "botnet_c2_beaconing",
+        "encrypted_malware"
+      ],
+      "errors": [],
+      "covered": true
+    },
+    {
+      "scenario": "recon_port_scan",
+      "target_class": "recon_port_scan",
+      "provenance": "controlled_synthetic_lab",
+      "events": 24,
+      "alerts": 17,
+      "detected_classes": [
+        "botnet_c2_beaconing",
+        "recon_port_scan"
+      ],
+      "errors": [],
+      "covered": true
+    },
+    {
+      "scenario": "exfiltration",
+      "target_class": "data_exfiltration",
+      "provenance": "controlled_synthetic_lab",
+      "events": 14,
+      "alerts": 2,
+      "detected_classes": [
+        "data_exfiltration"
+      ],
+      "errors": [],
+      "covered": true
+    }
+  ],
+  "all_covered": true
+}

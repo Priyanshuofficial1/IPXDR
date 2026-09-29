@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "ipxdr-synthetic-lab-v1",
+  "type": "controlled_synthetic_lab",
+  "warning": "Synthetic evaluation only; not real-world accuracy",
+  "seed": 42,
+  "rows": 560,
+  "classes": [
+    "c2_beaconing",
+    "ddos",
+    "dga_dns_tunneling",
+    "encrypted_malware",
+    "exfiltration",
+    "normal",
+    "recon_port_scan"
+  ],
+  "python": "3.13.12",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.42",
+  "created_utc": "2026-09-29T16:35:57.892723+00:00",
+  "source_files": [
+    {
+      "path": "datasets/real/c2/ctu43-neris.pcap",
+      "sha256": "189b38247b614ae51feee0e75b360552eecdee0b68843b88c7d9ed88d7be7631",
+      "type": "real_public_capture_reference",
+      "used_in_training": false
+    }
+  ],
+  "output_sha256": "00b85135afd06896bdf61706603e6c998694c024c0fca9c9af348a5044d3a0fb"
+}

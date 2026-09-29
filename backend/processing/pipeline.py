@@ -17,7 +17,7 @@ class PipelineStats:
     received:int=0; accepted:int=0; failed:int=0
 class Pipeline:
     def __init__(self,window_seconds:int=60, db_path: str | None = None):
-        self.windows=WindowStore(window_seconds); self.stats=PipelineStats(); self.behavior=BehavioralStore(); self.engine=DetectionEngine(); self.alerts=AlertStore(db_path=db_path); self.last_features={}; self.last_behavior_deviation=0.0
+        self.windows=WindowStore(window_seconds); self.stats=PipelineStats(); self.behavior=BehavioralStore(); self.engine=DetectionEngine(); self.alerts=AlertStore(db_path=db_path); self.last_features={}; self.last_behavior_deviation=0.0; self.last_detector_results=[]
     def reset_session(self) -> None:
         """Start a clean analysis session while preserving loaded ML models."""
         self.windows = WindowStore(self.windows.window_seconds)
@@ -26,6 +26,7 @@ class Pipeline:
         self.alerts.clear()
         self.last_features = {}
         self.last_behavior_deviation = 0.0
+        self.last_detector_results = []
 
     def process(self,event:FlowEvent)->NormalizedFlow:
         self.stats.received+=1
@@ -35,7 +36,8 @@ class Pipeline:
             feature_window=w[-256:]
             self.last_features={**extract_flow_features(n),**extract_temporal_features(feature_window),**extract_dns_features(feature_window),**extract_tls_features(feature_window),**extract_quic_features(feature_window),**communication_features(feature_window)}
             self.last_behavior_deviation=self.behavior.score(n.src_ip,feature_window)
-            _,_,alert=self.engine.analyze(n,feature_window,self.last_behavior_deviation)
+            _,results,alert=self.engine.analyze(n,feature_window,self.last_behavior_deviation)
+            self.last_detector_results = results
             if alert: self.alerts.add(alert)
             self.behavior.learn(n.src_ip,[n],self.last_behavior_deviation)
         except Exception:
